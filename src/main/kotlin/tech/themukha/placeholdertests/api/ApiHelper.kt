@@ -26,8 +26,6 @@ object ApiHelper {
         expectedResponseCode: Int = HttpStatus.SC_OK,
     ): T? {
         val response = executeRequest(endpoint, requestBody, pathParams, expectedResponseCode)
-        println(response.statusCode)
-        println(response.body.asString())
 
         if (response.statusCode != expectedResponseCode) throw ApiException(expectedResponseCode, response.statusCode, response.body.asString())
 
@@ -50,7 +48,6 @@ object ApiHelper {
         if (requestBody != null) {
             request = request.contentType(ContentType.JSON).body(toJson(requestBody))
         }
-        println(formattedPath)
 
 
         return when (endpoint.method) {
