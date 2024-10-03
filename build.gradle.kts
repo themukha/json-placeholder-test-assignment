@@ -17,7 +17,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
     implementation("io.qameta.allure:allure-junit5:$allureVersion")
