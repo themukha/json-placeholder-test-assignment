@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
-import java.util.stream.Stream
 
 class PostsTest {
     @Nested
@@ -20,7 +19,7 @@ class PostsTest {
     inner class CreatePostsTest {
 
         @ParameterizedTest(name = "Create post {index} successfully")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#validCreatePostProvider")
+        @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validCreatePostProvider")
         fun `Create post successfully`(newPost: PostDto) {
             val createdPost = PostsApi.`Create a new post`(newPost, HttpStatus.SC_CREATED)
             val lastPostId = PostsApi.`Get all posts`()
@@ -44,9 +43,9 @@ class PostsTest {
          * Если мои опасения подтвердились - заводим один баг репорт и описываем некорректную валидацию входящего тела запроса.
          * Но вопрос об отсутствии правил валидации данных у меня возник бы ещё на этапе статического тестирования требований.
          */
-        @ParameterizedTest(name = "Create post {index} failure")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#invalidCreatePostProvider")
-        fun `Create post failure`(invalidPost: PostDto) {
+        @ParameterizedTest(name = "Try to create post {index} with invalid data")
+        @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidCreatePostProvider")
+        fun `Try to create post with invalid data`(invalidPost: PostDto) {
             PostsApi.`Create a new post`(
                 newPost = invalidPost,
                 /**
@@ -75,15 +74,15 @@ class PostsTest {
 
         @ParameterizedTest(name = "Get post with valid ID {0}")
         @ValueSource(ints = [1, 50, 100])
-        fun `Get existing post by ID successfully`(postId: Int) {
+        fun `Get post with valid ID`(postId: Int) {
             val post = PostsApi.`Get post by ID`(postId)!!
 
             assertEquals(postId, post.id, "Expected post ID $postId, but got ${post.id}")
         }
 
-        @ParameterizedTest(name = "Get post with invalid ID {0} should fail")
+        @ParameterizedTest(name = "Try to get non-existing post by ID {0}")
         @ValueSource(ints = [0, 101, -1])
-        fun `Get non-existing post by ID should returns 404`(invalidPostId: Int) {
+        fun `Try to get non-existing post by ID`(invalidPostId: Int) {
             PostsApi.`Get post by ID`(
                 postId = invalidPostId,
                 expectedResponseCode = HttpStatus.SC_NOT_FOUND
@@ -95,99 +94,32 @@ class PostsTest {
     @Nested
     @DisplayName("Get Posts with Filtering Tests")
     inner class GetPostsFilteringTests {
-        @ParameterizedTest(name = "Get posts with filtering by ID successfully ({index})")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#validGetPostsFilteringProvider")
-        fun `Get posts with filtering by ID`(expectedPost: PostDto) {
-            val filteredPosts = PostsApi.`Get all posts`(filterId = expectedPost.id)
-            val foundPost = filteredPosts?.find { it.id == expectedPost.id }
 
-            assertAll(
-                { assertTrue(filteredPosts?.isNotEmpty() ?: false, "No posts found") },
-                { assertEquals(1, filteredPosts?.size, "Expected 1 post, but got ${filteredPosts?.size}") },
-                { assertEquals(expectedPost.id, foundPost?.id) },
-                { assertEquals(expectedPost.userId, foundPost?.userId) },
-                { assertEquals(expectedPost.title, foundPost?.title) },
-                { assertEquals(expectedPost.body, foundPost?.body) },
-            )
-        }
-
-        @ParameterizedTest(name = "Get posts with filtering by title successfully ({index})")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#validGetPostsFilteringProvider")
-        fun `Get posts with filtering by title`(expectedPost: PostDto) {
-            val filteredPosts = PostsApi.`Get all posts`(filterTitle = expectedPost.title)
+        @ParameterizedTest(name = "Get posts with filtering by {0} successfully")
+        @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validGetPostsFilteringProvider")
+        fun `Get posts with filtering`(filterParam: String, expectedPost: PostDto) {
+            val filteredPosts = when (filterParam) {
+                "id" -> PostsApi.`Get all posts`(filterId = expectedPost.id)
+                "userId" -> PostsApi.`Get all posts`(filterUserId = expectedPost.userId)
+                "title" -> PostsApi.`Get all posts`(filterTitle = expectedPost.title)
+                "body" -> PostsApi.`Get all posts`(filterBody = expectedPost.body)
+                else -> throw IllegalArgumentException("Invalid filter parameter: $filterParam")
+            }
 
             assertTrue(filteredPosts?.isNotEmpty() ?: false, "No posts found")
             assertAll({
                 filteredPosts?.forEachIndexed { index, post ->
-                    assertEquals(
-                        expectedPost.title,
-                        post.title,
-                        "Expected post title ${expectedPost.title}, but got ${post.title} at index $index"
-                    )
+                    when (filterParam) {
+                        "id" -> assertEquals(expectedPost.id, post.id, "Expected post ID ${expectedPost.id}, but got ${post.id} at index $index")
+                        "userId" -> assertEquals(expectedPost.userId, post.userId, "Expected post userId ${expectedPost.userId}, but got ${post.userId} at index $index")
+                        "title" -> assertEquals(expectedPost.title, post.title, "Expected post title ${expectedPost.title}, but got ${post.title} at index $index")
+                        "body" -> assertEquals(expectedPost.body, post.body, "Expected post body ${expectedPost.body}, but got ${post.body} at index $index")
+                        else -> throw IllegalArgumentException("Invalid filter parameter: $filterParam")
+                    }
                 }
             })
         }
 
-        @ParameterizedTest(name = "Get posts with filtering by body successfully ({index})")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#validGetPostsFilteringProvider")
-        fun `Get posts with filtering by body`(expectedPost: PostDto) {
-            val filteredPosts = PostsApi.`Get all posts`(filterBody = expectedPost.body)
-
-            assertTrue(filteredPosts?.isNotEmpty() ?: false, "No posts found")
-            assertAll({
-                filteredPosts?.forEachIndexed { index, post ->
-                    assertEquals(
-                        expectedPost.body,
-                        post.body,
-                        "Expected post body ${expectedPost.body}, but got ${post.body} at index $index"
-                    )
-                }
-            })
-        }
-
-        @ParameterizedTest(name = "Get posts with filtering by userId successfully ({index})")
-        @MethodSource("tech.themukha.placeholdertests.posts.PostsTest#validGetPostsFilteringProvider")
-        fun `Get posts with filtering by userId`(expectedPost: PostDto) {
-            val filteredPosts = PostsApi.`Get all posts`(filterUserId = expectedPost.userId)
-
-            assertTrue(filteredPosts?.isNotEmpty() ?: false, "No posts found")
-            assertAll({
-                filteredPosts?.forEachIndexed { index, post ->
-                    assertEquals(
-                        expectedPost.userId,
-                        post.userId,
-                        "Expected post userId ${expectedPost.userId}, but got ${post.userId} at index $index"
-                    )
-                }
-            })
-        }
     }
 
-    companion object {
-        @JvmStatic
-        fun validCreatePostProvider(): Stream<PostDto> = Stream.of(
-            PostDto(id = 0, userId = 1, title = "Test title 1", body = "Test body 1"),
-            PostDto(id = -1, userId = 10, title = "Test title 2", body = "Test body 2"),
-            PostDto(id = 100, userId = 3, title = "", body = "Test body 3"),
-            PostDto(id = 101, userId = 4, title = "Test title 4", body = ""),
-            PostDto(id = 1, userId = 5, title = "", body = ""),
-            PostDto(id = 1, userId = 6, title = " ", body = " "),
-            PostDto(id = 1, userId = 7, title = "Very long title".repeat(100), body = "Very long body".repeat(100)),
-            PostDto(id = null, userId = 8, title = "Test title 8", body = "Test body 8"),
-        )
-
-        @JvmStatic
-        fun invalidCreatePostProvider(): Stream<PostDto> = Stream.of(
-            PostDto(id = 1, userId = null, title = "Test title 1", body = "Test body 1"),
-            PostDto(id = 1, userId = 1, title = null, body = "Test body 2"),
-            PostDto(id = 1, userId = 1, title = "Test title 3", body = null),
-        )
-
-        @JvmStatic
-        fun validGetPostsFilteringProvider(): Stream<PostDto> {
-            val takePosts: Int = 3
-            val posts: List<PostDto> = PostsApi.`Get all posts`()!!
-            return posts.shuffled().take(takePosts).stream()
-        }
-    }
 }
