@@ -23,9 +23,10 @@ object ApiHelper {
         endpoint: Endpoint,
         requestBody: Any? = null,
         pathParams: Map<String, Any>? = null,
+        queryParams: Map<String, Any>? = null,
         expectedResponseCode: Int = HttpStatus.SC_OK,
     ): T? {
-        val response = executeRequest(endpoint, requestBody, pathParams, expectedResponseCode)
+        val response = executeRequest(endpoint, requestBody, pathParams = pathParams, queryParams = queryParams, expectedResponseCode)
 
         if (response.statusCode != expectedResponseCode) throw ApiException(expectedResponseCode, response.statusCode, response.body.asString())
 
@@ -40,18 +41,23 @@ object ApiHelper {
         endpoint: Endpoint,
         requestBody: Any? = null,
         pathParams: Map<String, Any?>? = null,
+        queryParams: Map<String, Any>? = null,
         expectedResponseCode: Int = HttpStatus.SC_OK,
     ): Response {
 
         val formattedPath = endpoint.setPathParams(pathParams)
-        var request: RequestSpecification = given()
-        if (requestBody != null) {
-            request = request.contentType(ContentType.JSON).body(toJson(requestBody))
+        val request: RequestSpecification = given()
+
+        requestBody?.let {
+            request.contentType(ContentType.JSON).body(toJson(requestBody))
         }
 
+        queryParams?.let {
+            request.queryParams(queryParams)
+        }
 
         return when (endpoint.method) {
-            Method.GET -> get(formattedPath)
+            Method.GET -> request.get(formattedPath)
             Method.POST -> request.post(formattedPath)
             Method.PUT -> request.put(formattedPath)
             Method.PATCH -> request.patch(formattedPath)
