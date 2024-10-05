@@ -3,15 +3,23 @@
 ## Запуск проекта
 
 1.  Склонируйте репозиторий
-2.  Откройте проект в IntelliJ IDEA или IntelliJ Aqua
-3.  Запустите тесты (PostsTest)
-4.  Отчет Allure будет сгенерирован в директории `target/allure-results`
+2.  Перейдите в корневую директорию проекта через терминал и выполните команду:
+    - Для Windows:
+    ```shell
+      ./gradlew.bat clean test
+    ```
+    - Для Unix (Linux, MacOS):
+    ```shell
+      ./gradlew clean test
+    ```
+3. Отчет Allure будет сгенерирован по следующему пути `./build/reports/allure-report/allureReport/index.html`
+    > [Клик здесь](./build/reports/allure-report/allureReport/index.html), чтобы открыть отчет после выполнения тестов
 
 ## Дополнительная информация и комментарии
 
 - Код, функционал и сообщения в проверках я писал на английском языке, с расчетом на то, что команда может быть интернациональной. 
 - Комментарии к коду я писал на русском языке для улучшения восприятия проверяющим ТЗ.
-- Добавил комментарий к тесту [**Create post failure**](./src/test/kotlin/tech.themukha.placeholdertests/posts/PostsTest.kt#L39) касательно того, что параметризованные тесты фейлятся.
+- Добавил комментарий к тесту [**Try to create post with invalid data**](./src/test/kotlin/tech/themukha/placeholdertests/posts/CreatePostsTests.kt#L32) касательно того, что параметризованные тесты фейлятся.
 - В параметризованных тестах использовал 2 типа источников тестовых аргументов - `ValueSource` и `MethodSource`, чтобы "показать" навыки.
 - В идеале я бы везде использовал MethodSource для динамической генерации тестовых данных и уменьшения флакающих тестов.
 

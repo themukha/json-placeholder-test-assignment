@@ -1,6 +1,7 @@
 package tech.themukha.placeholdertests.utils
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import tech.themukha.placeholdertests.dto.PostDto
 
 object WordFrequencyCounter {
 
@@ -10,10 +11,12 @@ object WordFrequencyCounter {
      * @return список пар самых часто встречающихся слов (слово, количество вхождений в постах).
      * Используем именно список пар, а не Map, так как список гарантирует корректный порядок топ-10 слов.
      * */
-    fun getTopWords(posts: List<String>, limit: Int = 10): List<Pair<String, Int>> {
+    fun getTopWords(posts: List<PostDto>, limit: Int = 10): List<Pair<String, Int>> {
+        val postBodies = posts.map { it.body!! }
+
         val wordCounts: MutableMap<String, Int> = mutableMapOf()
 
-        for (post in posts) {
+        for (post in postBodies) {
             val words = post.lowercase().split(Regex("\\s+")) // используем регулярку для разбиения строки на слова на тот случай, если встречаются несколько пробелов подряд
             for (word in words) {
                 wordCounts[word] = wordCounts.getOrDefault(word, 0) + 1
@@ -27,10 +30,25 @@ object WordFrequencyCounter {
 }
 
 fun main() {
-    val postsBodies = listOf(
-        "This is a test post",
-        "This is another test post with some more words",
-        "And yet another post for testing purposes"
+    val posts = listOf(
+        PostDto(
+            id = 0,
+            userId = 0,
+            title = "Title",
+            body = "This is a test post"
+        ),
+        PostDto(
+            id = 1,
+            userId = 1,
+            title = "Title",
+            body = "This is another test post with some more words"
+        ),
+        PostDto(
+            id = 2,
+            userId = 2,
+            title = "Title",
+            body = "And yet another post for testing purposes"
+        ),
     )
 
     val expectedTopWords = listOf(
@@ -46,7 +64,7 @@ fun main() {
         "words" to 1
     )
 
-    val actualTopWords = WordFrequencyCounter.getTopWords(postsBodies)
+    val actualTopWords = WordFrequencyCounter.getTopWords(posts)
 
     assertEquals(expectedTopWords, actualTopWords)
     println("Top ${actualTopWords.size} words:")
