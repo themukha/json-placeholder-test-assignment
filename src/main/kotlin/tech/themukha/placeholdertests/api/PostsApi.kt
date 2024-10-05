@@ -5,6 +5,7 @@ import io.restassured.RestAssured.baseURI
 import org.apache.http.HttpStatus
 import tech.themukha.placeholdertests.api.ApiHelper.callApi
 import tech.themukha.placeholdertests.config.TestConfig
+import tech.themukha.placeholdertests.dto.CommentDto
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.utils.DataClassExtensions.toParams
 
@@ -75,6 +76,24 @@ object PostsApi {
         expectedResponseCode: Int = HttpStatus.SC_OK
     ): PostDto? {
         return callApi(Endpoint.DELETE_POST, pathParams = mapOf("postId" to postId), expectedResponseCode = expectedResponseCode)
+    }
+
+    @Step("Get comments for post with ID `{postId}`")
+    fun `Get comments for post`(
+        postId: Int,
+        filterCommentId: Int? = null,
+        filterName: String? = null,
+        filterEmail: String? = null,
+        expectedResponseCode: Int = HttpStatus.SC_OK
+    ): List<CommentDto>? {
+        val queryParams = CommentDto(
+            postId = null,
+            id = filterCommentId,
+            name = filterName,
+            email = filterEmail,
+            body = null
+        ).toParams()
+        return callApi(Endpoint.GET_COMMENTS_BY_POST_ID, pathParams = mapOf("postId" to postId), queryParams = queryParams, expectedResponseCode = expectedResponseCode)
     }
 
 }

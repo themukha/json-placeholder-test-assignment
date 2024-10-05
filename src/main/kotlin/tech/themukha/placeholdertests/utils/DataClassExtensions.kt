@@ -1,5 +1,6 @@
 package tech.themukha.placeholdertests.utils
 
+import tech.themukha.placeholdertests.dto.CommentDto
 import tech.themukha.placeholdertests.dto.PostDto
 import kotlin.reflect.full.memberProperties
 
@@ -21,6 +22,11 @@ object DataClassExtensions {
     }
 
     fun List<PostDto>?.getRandomPosts(count: Int): List<PostDto>? {
+        if (this == null) return null
+        return this.shuffled().take(count)
+    }
+
+    fun List<CommentDto>?.getRandomComments(count: Int): List<CommentDto>? {
         if (this == null) return null
         return this.shuffled().take(count)
     }
