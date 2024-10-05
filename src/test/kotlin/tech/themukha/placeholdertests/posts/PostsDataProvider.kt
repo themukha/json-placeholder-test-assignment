@@ -58,4 +58,22 @@ object PostsDataProvider {
             Arguments.of("body", post),
         )
     }
+
+    @JvmStatic
+    fun validPatchPostProvider(): Stream<Arguments> {
+        val posts = PostsApi.`Get all posts`().getRandomPosts(5)!!
+        return Stream.of(
+            Arguments.of(posts[0].id, PostDto(id = Int.MAX_VALUE, userId = 5, title = "new title", body = "new body")),
+            Arguments.of(posts[1].id, PostDto(id = null, userId = null, title = "new title", body = null)),
+            Arguments.of(posts[2].id, PostDto(id = null, userId = null, title = null, body = "new body")),
+            Arguments.of(posts[3].id, PostDto(id = null, userId = 10, title = null, body = null)),
+            Arguments.of(posts[4].id, PostDto(id = 5, userId = null, title = "very long title".repeat(50), body = "very long body".repeat(50)))
+        )
+    }
+
+    @JvmStatic
+    fun invalidPostIdProvider(): Stream<Int> = Stream.of(
+        Int.MIN_VALUE,
+        Int.MAX_VALUE
+    )
 }

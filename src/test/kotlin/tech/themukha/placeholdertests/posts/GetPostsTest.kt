@@ -15,7 +15,7 @@ import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 
-@DisplayName("Get Post tests")
+@DisplayName("Get Posts tests")
 @Feature("Posts")
 @Story("Get Posts")
 class GetPostsTests {
@@ -43,6 +43,7 @@ class GetPostsTests {
 
         @ParameterizedTest(name = "Get post with valid ID {0}")
         @ValueSource(ints = [1, 50, 100])
+        @DisplayName("Get post with valid ID")
         fun `Get post with valid ID`(postId: Int) {
             var post: PostDto? = null
 
@@ -61,6 +62,7 @@ class GetPostsTests {
     inner class GetPostsInvalidTest {
         @ParameterizedTest(name = "Try to get non-existing post by ID {0}")
         @ValueSource(ints = [0, 101, -1])
+        @DisplayName("Try to get non-existing post by ID")
         fun `Try to get non-existing post by ID`(invalidPostId: Int) {
             TestFlow()
                 .step("Try to get post with wrong ID") {

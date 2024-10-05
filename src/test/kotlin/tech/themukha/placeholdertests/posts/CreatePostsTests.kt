@@ -13,7 +13,7 @@ import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getLatestPost
 
-@DisplayName("Create Post tests")
+@DisplayName("Create Posts tests")
 @Feature("Posts")
 @Story("Create Posts")
 class CreatePostsTest {

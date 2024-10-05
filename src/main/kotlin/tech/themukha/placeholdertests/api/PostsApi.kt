@@ -57,7 +57,7 @@ object PostsApi {
         updatedPost: PostDto,
         expectedResponseCode: Int = HttpStatus.SC_OK
     ): PostDto? {
-        return callApi(Endpoint.UPDATE_POST, pathParams = mapOf("postId" to postId), requestBody = updatedPost, expectedResponseCode = expectedResponseCode)
+        return callApi(Endpoint.PUT_POST, pathParams = mapOf("postId" to postId), requestBody = updatedPost, expectedResponseCode = expectedResponseCode)
     }
 
     @Step("Partially update an existing post with ID `{postId}`")
