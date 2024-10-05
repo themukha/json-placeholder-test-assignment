@@ -6,11 +6,11 @@
 2.  Перейдите в корневую директорию проекта через терминал и выполните команду:
     - Для Windows:
     ```shell
-      ./gradlew.bat clean test
+      ./gradlew.bat cleanTest test
     ```
     - Для Unix (Linux, MacOS):
     ```shell
-      ./gradlew clean test
+      ./gradlew cleanTest test
     ```
 3. Отчет Allure будет сгенерирован по следующему пути `./build/reports/allure-report/allureReport/index.html`
     > [Клик здесь](./build/reports/allure-report/allureReport/index.html), чтобы открыть отчет после выполнения тестов
@@ -23,10 +23,8 @@
 - В параметризованных тестах использовал 2 типа источников тестовых аргументов - `ValueSource` и `MethodSource`, чтобы "показать" навыки.
 - В идеале я бы везде использовал MethodSource для динамической генерации тестовых данных и уменьшения флакающих тестов.
 
-[//]: # (TODO: заменить строку L42 на другое значение, если изменится порядок тестов для улучшения читаемости README в ГитХабе)
-
 ## Тестируемые ендпоинты
-> На основе [JSONPlaceholder Guide]()
+> На основе [JSONPlaceholder Guide](https://jsonplaceholder.typicode.com/guide/)
 
 - `/posts`
   - Методы для тестирования:
