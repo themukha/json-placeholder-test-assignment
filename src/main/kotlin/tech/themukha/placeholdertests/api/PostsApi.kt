@@ -52,7 +52,7 @@ object PostsApi {
     }
 
     @Step("Update an existing post with ID `{postId}`")
-    fun `Update an existing post`(
+    fun `Put update an existing post`(
         postId: Int,
         updatedPost: PostDto,
         expectedResponseCode: Int = HttpStatus.SC_OK

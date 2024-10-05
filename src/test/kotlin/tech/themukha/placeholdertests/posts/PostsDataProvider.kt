@@ -3,9 +3,11 @@ package tech.themukha.placeholdertests.posts
 import org.junit.jupiter.params.provider.Arguments
 import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
+import tech.themukha.placeholdertests.posts.PostsDataProvider.validPutPostProvider
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPosts
 import java.util.stream.Stream
+import kotlin.random.Random
 
 object PostsDataProvider {
     @JvmStatic
@@ -76,4 +78,19 @@ object PostsDataProvider {
         Int.MIN_VALUE,
         Int.MAX_VALUE
     )
+
+    @JvmStatic
+    fun validPutPostProvider(): Stream<Arguments> {
+        return PostsApi.`Get all posts`().getRandomPosts(5)?.mapIndexed { index, post ->
+            Arguments.of(
+                post.id,
+                PostDto(
+                    id = if (index % 2 == 0) Random.nextInt() else post.id,
+                    userId = if (Random.nextBoolean()) 10 else post.userId,
+                    title = if (Random.nextBoolean()) Random.nextInt().toString() else post.title,
+                    body = if (Random.nextBoolean()) Random.nextInt().toString() else post.body,
+                )
+            )
+        }?.stream() ?: Stream.empty()
+    }
 }
