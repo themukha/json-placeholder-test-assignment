@@ -11,6 +11,7 @@
         </filter>
     </appender>
 
+<!--    <logger name="tech.themukha" level="DEBUG"/>-->
     <logger name="tech.themukha" level="INFO"/>
     <logger name="io.qameta.allure.AllureLifecycle" level="OFF"/>
     <root level="INFO">

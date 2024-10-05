@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val junitVersion: String = "5.11.1"
 val restAssuredVersion: String = "5.5.0"
@@ -22,7 +23,7 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    implementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
@@ -35,9 +36,20 @@ dependencies {
 
 tasks.test {
     testLogging {
-        events("passed", "skipped", "failed")
+        events(
+//            TestLogEvent.PASSED,
+//            TestLogEvent.STARTED,
+//            TestLogEvent.SKIPPED,
+//            TestLogEvent.FAILED,
+//            TestLogEvent.STANDARD_ERROR,
+//            TestLogEvent.STANDARD_OUT,
+        )
+
         exceptionFormat = TestExceptionFormat.SHORT
         showStandardStreams = true
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
     }
     useJUnitPlatform()
     ignoreFailures = true
@@ -55,6 +67,7 @@ tasks.allureReport {
         adapter {
             enabled = true
         }
+        clean = true
     }
 }
 

@@ -1,9 +1,20 @@
 package tech.themukha.placeholdertests.logging
 
+import io.qameta.allure.listener.ContainerLifecycleListener
+import io.qameta.allure.listener.StepLifecycleListener
+import io.qameta.allure.model.StepResult
+import io.qameta.allure.model.TestResultContainer
 import org.slf4j.LoggerFactory
 
-object TestLogger {
-    private val logger = LoggerFactory.getLogger(this::class.java)
+class TestLogger : StepLifecycleListener, ContainerLifecycleListener {
+
+    override fun beforeContainerStart(container: TestResultContainer?) {
+        logger.info(container?.name)
+    }
+
+    override fun beforeStepStart(result: StepResult) {
+        logger.info(result.name)
+    }
 
     fun info(message: String) {
         logger.info(message)
@@ -14,10 +25,14 @@ object TestLogger {
     }
 
     fun error(message: String) {
-        logger.debug(message)
+        logger.error(message)
     }
 
     fun warn(message: String) {
-        logger.debug(message)
+        logger.warn(message)
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }
