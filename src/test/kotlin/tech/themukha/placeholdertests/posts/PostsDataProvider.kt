@@ -3,6 +3,8 @@ package tech.themukha.placeholdertests.posts
 import org.junit.jupiter.params.provider.Arguments
 import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
+import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
+import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPosts
 import java.util.stream.Stream
 
 object PostsDataProvider {
@@ -29,13 +31,31 @@ object PostsDataProvider {
     fun validGetPostsFilteringProvider(): Stream<Arguments> {
         val takePosts: Int = 4
         val posts: List<PostDto> = PostsApi
-            .`Get all posts`()!!
-            .shuffled().take(takePosts)
+            .`Get all posts`()
+            .getRandomPosts(takePosts)!!
         return Stream.of(
             Arguments.of("id", posts[0]),
             Arguments.of("userId", posts[1]),
             Arguments.of("title", posts[2]),
             Arguments.of("body", posts[3]),
+        )
+    }
+
+    @JvmStatic
+    fun invalidGetPostsFilteringProvider(): Stream<Arguments> {
+        val existingPost = PostsApi.`Get all posts`()
+            .getRandomPost()!!
+        val post = PostDto(
+            id = Int.MAX_VALUE,
+            userId = Int.MAX_VALUE,
+            title = existingPost.body,
+            body = existingPost.title
+        )
+        return Stream.of(
+            Arguments.of("id", post),
+            Arguments.of("userId", post),
+            Arguments.of("title", post),
+            Arguments.of("body", post),
         )
     }
 }

@@ -1,8 +1,6 @@
 package tech.themukha.placeholdertests.api
 
 import io.restassured.RestAssured.baseURI
-import io.restassured.RestAssured.delete
-import io.restassured.RestAssured.get
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.http.Method
@@ -61,7 +59,7 @@ object ApiHelper {
             Method.POST -> request.post(formattedPath)
             Method.PUT -> request.put(formattedPath)
             Method.PATCH -> request.patch(formattedPath)
-            Method.DELETE -> delete(formattedPath)
+            Method.DELETE -> request.delete(formattedPath)
             else -> throw IllegalArgumentException("Unsupported method")
         }.then().statusCode(expectedResponseCode).extract().response()
     }
