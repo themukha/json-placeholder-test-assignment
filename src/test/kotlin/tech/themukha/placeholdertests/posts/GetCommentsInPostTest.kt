@@ -21,7 +21,7 @@ import tech.themukha.placeholdertests.flow.TestFlow
 class GetCommentsInPostTest {
 
     @ParameterizedTest(name = "Get comments with filtering {index}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validGetCommentsProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validGetCommentsProvider")
     @DisplayName("Get comments with filtering")
     fun `Get comments with filtering`(postId: Int, filter: CommentDto, expectedComment: CommentDto) {
         var comments: List<CommentDto>? = null
@@ -56,7 +56,7 @@ class GetCommentsInPostTest {
      * ЕСли система должна возвращать 404 или любой другой отличный от 200 ответ - заводим баг-репорт.
      * */
     @ParameterizedTest(name = "Get comments for non-existing post by ID should fail {index}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidPostIdProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidPostIdProvider")
     @DisplayName("Get comments for non-existing post by ID")
     fun `Get comments for non-existing post by ID`(nonExistingPostId: Int) {
         var comments: List<CommentDto>? = null

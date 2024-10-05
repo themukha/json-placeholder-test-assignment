@@ -1,9 +1,11 @@
-package tech.themukha.placeholdertests.posts
+package tech.themukha.placeholdertests.providers
 
 import org.junit.jupiter.params.provider.Arguments
 import tech.themukha.placeholdertests.api.PostsApi
+import tech.themukha.placeholdertests.dto.CommentDto
 import tech.themukha.placeholdertests.dto.PostDto
-import tech.themukha.placeholdertests.posts.PostsDataProvider.validPutPostProvider
+import tech.themukha.placeholdertests.providers.PostsDataProvider.validGetCommentsProvider
+import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomComments
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPosts
 import java.util.stream.Stream
@@ -99,5 +101,35 @@ object PostsDataProvider {
         return PostsApi.`Get all posts`().getRandomPosts(3)?.map {
             Arguments.of(it.id)
         }?.stream() ?: Stream.empty()
+    }
+
+    @JvmStatic
+    fun validGetCommentsProvider(): Stream<Arguments> {
+        val post = PostsApi.`Get all posts`().getRandomPost()!!
+        val comments: MutableList<Pair<Int, List<CommentDto>>> = mutableListOf()
+        val commentsForPost = PostsApi.`Get comments for post`(postId = post.id!!).getRandomComments(3)
+        commentsForPost?.let {
+            comments.add(Pair(post.id!!, commentsForPost))
+        }
+
+        val arguments = comments.flatMap { (postId, commentsList) ->
+            commentsList.flatMap { comment ->
+                listOf(
+                    Arguments.of(postId, CommentDto(id = comment.id), comment),
+                    Arguments.of(postId, CommentDto(email = comment.email), comment),
+                    Arguments.of(postId, CommentDto(name = comment.name), comment)
+                )
+            }
+        }
+        return arguments.stream()
+    }
+}
+
+fun main() {
+    val args = validGetCommentsProvider()
+    args.forEach {
+        println(it.get()[0])
+        println(it.get()[1])
+        println(it.get()[2])
     }
 }

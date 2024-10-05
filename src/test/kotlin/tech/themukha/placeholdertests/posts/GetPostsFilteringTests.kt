@@ -19,7 +19,7 @@ import tech.themukha.placeholdertests.flow.TestFlow
 class GetPostsFilteringTests {
 
     @ParameterizedTest(name = "Get posts with filtering by {0} successfully")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validGetPostsFilteringProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validGetPostsFilteringProvider")
     @DisplayName("Get posts with filtering")
     fun `Get posts with filtering`(filterParam: String, expectedPost: PostDto) {
         var filteredPosts: List<PostDto>? = null
@@ -54,7 +54,7 @@ class GetPostsFilteringTests {
     }
 
     @ParameterizedTest(name = "Try to get posts with invalid filtering by {0}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidGetPostsFilteringProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidGetPostsFilteringProvider")
     @DisplayName("Try to get posts with invalid filtering")
     fun `Try to get posts with invalid filtering`(filterParam: String, expectedPost: PostDto) {
         var filteredPosts: List<PostDto>? = null

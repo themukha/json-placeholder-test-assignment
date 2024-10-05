@@ -25,7 +25,7 @@ class PatchPostsTests {
      * Заносим баг-репорт на доску.
      * */
     @ParameterizedTest(name = "Partially update existing post with ID {0} successfully")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validPatchPostProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validPatchPostProvider")
     @DisplayName("Partially update existing post successfully")
     fun `Partially update existing post successfully`(postId: Int, updatedPost: PostDto) {
         var patchedPost: PostDto? = null
@@ -84,7 +84,7 @@ class PatchPostsTests {
      * Заносим баг-репорт на доску.
      * */
     @ParameterizedTest(name = "Fail to partially update a non-existing post with invalid ID {0}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidPostIdProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidPostIdProvider")
     @DisplayName("Partially update non-existing post by ID")
     fun `Partially update non-existing post by ID`(invalidPostId: Int) {
 

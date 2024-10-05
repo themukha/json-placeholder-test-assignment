@@ -21,7 +21,7 @@ import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
 class PutPostsTests {
 
     @ParameterizedTest(name = "Update existing post with ID {0} successfully")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validPutPostProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validPutPostProvider")
     @DisplayName("Update existing post successfully")
     fun `Update existing post successfully`(postId: Int, updatedPost: PostDto) {
         var putPost: PostDto? = null
@@ -75,7 +75,7 @@ class PutPostsTests {
      * Заносим баг-репорт на доску.
      * */
     @ParameterizedTest(name = "Fail to update a non-existing post with ID {0}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidPostIdProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidPostIdProvider")
     @DisplayName("Put non-existing post by ID")
     fun `Put non-existing post by ID`(invalidPostId: Int) {
         TestFlow()

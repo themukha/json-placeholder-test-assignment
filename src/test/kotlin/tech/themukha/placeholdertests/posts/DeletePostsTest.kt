@@ -22,7 +22,8 @@ import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
 class DeletePostsTests {
 
     @ParameterizedTest(name = "Delete existing post with ID {0} successfully")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validDeletePostProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validDeletePostProvider")
+    @DisplayName("Delete existing post successfully")
     fun `Delete existing post successfully`(postId: Int) {
 
         TestFlow()
@@ -39,7 +40,8 @@ class DeletePostsTests {
      * Заводим баг-репорт.
      * */
     @ParameterizedTest(name = "Fail to delete a non-existing post with ID {0}")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidPostIdProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidPostIdProvider")
+    @DisplayName("Delete non-existing post by ID should fail")
     fun `Delete non-existing post by ID should fail`(invalidPostId: Int) {
 
         TestFlow()

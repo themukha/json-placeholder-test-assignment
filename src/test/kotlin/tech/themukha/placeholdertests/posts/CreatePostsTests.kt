@@ -19,7 +19,7 @@ import tech.themukha.placeholdertests.utils.DataClassExtensions.getLatestPost
 class CreatePostsTest {
 
     @ParameterizedTest(name = "Create post {0} successfully")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#validCreatePostProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#validCreatePostProvider")
     @DisplayName("Create post successfully")
     fun `Create post successfully`(newPost: PostDto) {
         var lastPostId: Int? = null
@@ -52,7 +52,7 @@ class CreatePostsTest {
      * Но вопрос об отсутствии правил валидации данных у меня возник бы ещё на этапе статического тестирования требований.
      */
     @ParameterizedTest(name = "Try to create post {0} with invalid data")
-    @MethodSource("tech.themukha.placeholdertests.posts.PostsDataProvider#invalidCreatePostProvider")
+    @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidCreatePostProvider")
     @DisplayName("Try to create post with invalid data")
     fun `Try to create post with invalid data`(invalidPost: PostDto) {
 
