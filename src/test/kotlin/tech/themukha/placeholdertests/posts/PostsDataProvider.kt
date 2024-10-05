@@ -93,4 +93,11 @@ object PostsDataProvider {
             )
         }?.stream() ?: Stream.empty()
     }
+
+    @JvmStatic
+    fun validDeletePostProvider(): Stream<Arguments> {
+        return PostsApi.`Get all posts`().getRandomPosts(3)?.map {
+            Arguments.of(it.id)
+        }?.stream() ?: Stream.empty()
+    }
 }
