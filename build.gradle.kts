@@ -7,6 +7,7 @@ val allureVersion: String = "2.29.0"
 val gsonVersion: String = "2.11.0"
 val slf4jVersion: String = "2.0.16"
 val logbackVersion: String = "1.5.8"
+val jacksonVersion: String = "2.18.0"
 
 plugins {
     kotlin("jvm") version "1.9.23"
@@ -32,6 +33,9 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion") // Logback
     implementation("ch.qos.logback:logback-core:$logbackVersion") // Logback
     implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 }
 
 tasks.test {
