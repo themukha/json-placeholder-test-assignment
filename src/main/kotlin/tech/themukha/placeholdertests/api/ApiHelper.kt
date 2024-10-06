@@ -13,9 +13,6 @@ import tech.themukha.placeholdertests.utils.JsonUtils.toJson
 import tech.themukha.placeholdertests.utils.RestAssuredExtensions.extractAs
 
 object ApiHelper {
-    init {
-        baseURI = TestConfig.BASE_URL
-    }
 
     inline fun <reified T> callApi(
         endpoint: Endpoint,

@@ -7,11 +7,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.CommentDto
 import tech.themukha.placeholdertests.flow.TestFlow
 
@@ -28,7 +26,7 @@ class GetCommentsInPostTest {
 
         TestFlow()
             .step("Getting comments with filtering") {
-                comments = PostsApi.`Get comments for post`(postId = postId, expectedResponseCode = HttpStatus.SC_OK,
+                comments = `Get comments for post`(postId = postId, expectedResponseCode = HttpStatus.SC_OK,
                     filterCommentId = filter.id,
                     filterEmail = filter.email,
                     filterName = filter.name
@@ -51,7 +49,7 @@ class GetCommentsInPostTest {
     }
 
     /**
-     * Получаем 200 ответ по несуществующим постам, у которых не может быть комментариев.
+     * Получаем 200 ответ и пустой список в теле ответа по несуществующим постам, у которых не может быть комментариев.
      * Идем к аналитикам и обсуждаем как должна вести себя система.
      * ЕСли система должна возвращать 404 или любой другой отличный от 200 ответ - заводим баг-репорт.
      * */
@@ -59,11 +57,10 @@ class GetCommentsInPostTest {
     @MethodSource("tech.themukha.placeholdertests.providers.PostsDataProvider#invalidPostIdProvider")
     @DisplayName("Get comments for non-existing post by ID")
     fun `Get comments for non-existing post by ID`(nonExistingPostId: Int) {
-        var comments: List<CommentDto>? = null
 
         TestFlow()
             .step("Get comments with filtering for non-existing post by ID expecting 404") {
-                comments = PostsApi.`Get comments for post`(
+                `Get comments for post`(
                     nonExistingPostId,
                     expectedResponseCode = HttpStatus.SC_NOT_FOUND
                 )

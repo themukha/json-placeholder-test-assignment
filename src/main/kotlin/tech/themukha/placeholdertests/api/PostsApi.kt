@@ -9,7 +9,7 @@ import tech.themukha.placeholdertests.dto.CommentDto
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.utils.DataClassExtensions.toParams
 
-object PostsApi {
+open class PostsApi {
 
     init {
         baseURI = TestConfig.BASE_URL

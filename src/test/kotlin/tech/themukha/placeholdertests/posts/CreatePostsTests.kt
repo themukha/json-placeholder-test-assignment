@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getLatestPost
@@ -27,11 +26,11 @@ class CreatePostsTest {
 
         TestFlow()
             .step("Get last post ID") {
-                lastPostId = PostsApi.`Get all posts`()
+                lastPostId = `Get all posts`()
                     .getLatestPost()?.id ?: 0
             }
             .step("Creating a new post") {
-                createdPost = PostsApi.`Create a new post`(newPost, HttpStatus.SC_CREATED)
+                createdPost = `Create a new post`(newPost, HttpStatus.SC_CREATED)
             }
             .step("Assert created post ID") {
                 assertAll(
@@ -58,7 +57,7 @@ class CreatePostsTest {
 
         TestFlow()
             .step("Try to create a new post") {
-                PostsApi.`Create a new post`(
+                `Create a new post`(
                     newPost = invalidPost,
                     /**
                      * Или другой ожидаемый код ответа.

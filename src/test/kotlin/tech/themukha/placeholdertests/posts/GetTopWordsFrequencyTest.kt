@@ -3,7 +3,6 @@ package tech.themukha.placeholdertests.posts
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 import tech.themukha.placeholdertests.logging.TestLogger
@@ -19,7 +18,7 @@ class GetTopWordsFrequencyTest {
 
         TestFlow()
             .step("Top $numberOfWords words frequency:") {
-                val posts: List<PostDto> = PostsApi.`Get all posts`()!!
+                val posts: List<PostDto> = `Get all posts`()!!
                 val topWords = WordFrequencyCounter.getTopWords(limit = numberOfWords, posts = posts)
                 topWords.forEachIndexed { index, (word, count) ->
                     TestLogger().info("${index + 1}. $word - $count")

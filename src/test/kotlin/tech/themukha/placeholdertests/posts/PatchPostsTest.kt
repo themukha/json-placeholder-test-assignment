@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
@@ -29,11 +28,14 @@ class PatchPostsTests {
     @DisplayName("Partially update existing post successfully")
     fun `Partially update existing post successfully`(postId: Int, updatedPost: PostDto) {
         var patchedPost: PostDto? = null
-        val existingPost = PostsApi.`Get post by ID`(postId)!!
+        var existingPost: PostDto? = null
 
         TestFlow()
+            .step("Getting the existing post by ID") {
+                existingPost = `Get post by ID`(postId)!!
+            }
             .step("Partially update post with ID $postId") {
-                patchedPost = PostsApi.`Patch an existing post`(
+                patchedPost = `Patch an existing post`(
                     postId = postId,
                     updatedPost = updatedPost
                 )
@@ -42,7 +44,7 @@ class PatchPostsTests {
                 assertAll(
                     {
                         assertEquals(
-                            existingPost.id,
+                            existingPost?.id,
                             patchedPost?.id,
                             "Post ID should not be patched"
                         )
@@ -90,7 +92,7 @@ class PatchPostsTests {
 
         TestFlow()
             .step("Partially update non-existing post with ID $invalidPostId expecting 404 response code") {
-                PostsApi.`Patch an existing post`(
+                `Patch an existing post`(
                     invalidPostId,
                     PostDto(
                         id = 5,
@@ -106,11 +108,14 @@ class PatchPostsTests {
     @Test
     @DisplayName("Partially update post with empty request should fail")
     fun `Partially update post with empty request should fail`() {
-        val existingPost = PostsApi.`Get all posts`().getRandomPost()
+        var existingPost: PostDto? = null
 
         TestFlow()
+            .step("Getting the existing post by ID") {
+                existingPost = `Get all posts`().getRandomPost()!!
+            }
             .step("Partially update post with empty body expecting an exception") {
-                val patchedPost = PostsApi.`Patch an existing post`(
+                val patchedPost = `Patch an existing post`(
                     existingPost?.id!!,
                     PostDto(
                         null,

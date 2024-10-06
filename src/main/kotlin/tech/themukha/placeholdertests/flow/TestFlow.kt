@@ -1,9 +1,11 @@
 package tech.themukha.placeholdertests.flow
 
 import io.qameta.allure.Step
+import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.logging.TestLogger
 
-class TestFlow {
+// позднее можем наследовать CommentsApi(), UsersApi() и т.п.
+class TestFlow : PostsApi() {
 
     @Step("{stepName}")
     fun step(stepName: String, action: TestFlow.() -> Unit): TestFlow {

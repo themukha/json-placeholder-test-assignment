@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 import tech.themukha.placeholdertests.utils.DataClassExtensions.getRandomPost
@@ -28,7 +27,7 @@ class PutPostsTests {
 
         TestFlow()
             .step("Update existing post with ID $postId") {
-                putPost = PostsApi.`Put update an existing post`(
+                putPost = `Put update an existing post`(
                     postId = postId,
                     updatedPost = updatedPost
                 )
@@ -80,7 +79,7 @@ class PutPostsTests {
     fun `Put non-existing post by ID`(invalidPostId: Int) {
         TestFlow()
             .step("Update non-existing post with ID $invalidPostId expecting an exception") {
-                PostsApi.`Put update an existing post`(
+                `Put update an existing post`(
                     invalidPostId,
                     PostDto(
                         id = null,
@@ -95,7 +94,7 @@ class PutPostsTests {
     @Test
     @DisplayName("Partially update post with empty request should fail")
     fun `Partially update post with empty request should fail`() {
-        val existingPost = PostsApi.`Get all posts`().getRandomPost()
+        var existingPost: PostDto? = null
         val newPost = PostDto(
             null,
             null,
@@ -104,13 +103,16 @@ class PutPostsTests {
         )
 
         TestFlow()
+            .step("Getting the existing post by ID") {
+                existingPost = `Get all posts`().getRandomPost()
+            }
             .step("Partially update post with empty body expecting an exception") {
-                val patchedPost = PostsApi.`Put update an existing post`(
+                val patchedPost = `Put update an existing post`(
                     existingPost?.id!!,
                     newPost
                 )
 
-                assertEquals(newPost.copy(id = existingPost.id), patchedPost)
+                assertEquals(newPost.copy(id = existingPost?.id), patchedPost)
             }
         }
     }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 
@@ -27,10 +26,10 @@ class GetPostsFilteringTests {
         TestFlow()
             .step("Get posts with filtering by $filterParam") {
                 filteredPosts = when (filterParam) {
-                    "id" -> PostsApi.`Get all posts`(filterId = expectedPost.id)
-                    "userId" -> PostsApi.`Get all posts`(filterUserId = expectedPost.userId)
-                    "title" -> PostsApi.`Get all posts`(filterTitle = expectedPost.title)
-                    "body" -> PostsApi.`Get all posts`(filterBody = expectedPost.body)
+                    "id" -> `Get all posts`(filterId = expectedPost.id)
+                    "userId" -> `Get all posts`(filterUserId = expectedPost.userId)
+                    "title" -> `Get all posts`(filterTitle = expectedPost.title)
+                    "body" -> `Get all posts`(filterBody = expectedPost.body)
                     else -> throw IllegalArgumentException("Invalid filter parameter: $filterParam")
                 }
             }
@@ -62,10 +61,10 @@ class GetPostsFilteringTests {
         TestFlow()
             .step("Get posts with invalid filtering by $filterParam expecting empty list") {
                 filteredPosts = when (filterParam) {
-                    "id" -> PostsApi.`Get all posts`(filterId = expectedPost.id)
-                    "userId" -> PostsApi.`Get all posts`(filterUserId = expectedPost.userId)
-                    "title" -> PostsApi.`Get all posts`(filterTitle = expectedPost.title)
-                    "body" -> PostsApi.`Get all posts`(filterBody = expectedPost.body)
+                    "id" -> `Get all posts`(filterId = expectedPost.id)
+                    "userId" -> `Get all posts`(filterUserId = expectedPost.userId)
+                    "title" -> `Get all posts`(filterTitle = expectedPost.title)
+                    "body" -> `Get all posts`(filterBody = expectedPost.body)
                     else -> throw IllegalArgumentException("Invalid filter parameter: $filterParam")
                 }
                 assertNotNull(filteredPosts, "Filtered posts should not be null")

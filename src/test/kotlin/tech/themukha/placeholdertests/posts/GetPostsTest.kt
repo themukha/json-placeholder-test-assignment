@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import tech.themukha.placeholdertests.api.PostsApi
 import tech.themukha.placeholdertests.dto.PostDto
 import tech.themukha.placeholdertests.flow.TestFlow
 
@@ -31,7 +30,7 @@ class GetPostsTests {
 
             TestFlow()
                 .step("Getting all posts") {
-                    posts = PostsApi.`Get all posts`()!!
+                    posts = `Get all posts`()!!
                 }
                 .step("Check all posts were successful got") {
                     assertAll(
@@ -49,7 +48,7 @@ class GetPostsTests {
 
             TestFlow()
                 .step("Getting post by ID") {
-                    post = PostsApi.`Get post by ID`(postId)!!
+                    post = `Get post by ID`(postId)!!
                 }
                 .step("Check post was successful got") {
                     assertEquals(postId, post?.id, "Expected post ID $postId, but got ${post?.id}")
@@ -66,7 +65,7 @@ class GetPostsTests {
         fun `Try to get non-existing post by ID`(invalidPostId: Int) {
             TestFlow()
                 .step("Try to get post with wrong ID") {
-                    PostsApi.`Get post by ID`(
+                    `Get post by ID`(
                         postId = invalidPostId,
                         expectedResponseCode = HttpStatus.SC_NOT_FOUND
                     )

@@ -34,7 +34,7 @@ object PostsDataProvider {
     @JvmStatic
     fun validGetPostsFilteringProvider(): Stream<Arguments> {
         val takePosts: Int = 4
-        val posts: List<PostDto> = PostsApi
+        val posts: List<PostDto> = PostsApi()
             .`Get all posts`()
             .getRandomPosts(takePosts)!!
         return Stream.of(
@@ -47,7 +47,7 @@ object PostsDataProvider {
 
     @JvmStatic
     fun invalidGetPostsFilteringProvider(): Stream<Arguments> {
-        val existingPost = PostsApi.`Get all posts`()
+        val existingPost = PostsApi().`Get all posts`()
             .getRandomPost()!!
         val post = PostDto(
             id = Int.MAX_VALUE,
@@ -65,7 +65,7 @@ object PostsDataProvider {
 
     @JvmStatic
     fun validPatchPostProvider(): Stream<Arguments> {
-        val posts = PostsApi.`Get all posts`().getRandomPosts(5)!!
+        val posts = PostsApi().`Get all posts`().getRandomPosts(5)!!
         return Stream.of(
             Arguments.of(posts[0].id, PostDto(id = Int.MAX_VALUE, userId = 5, title = "new title", body = "new body")),
             Arguments.of(posts[1].id, PostDto(id = null, userId = null, title = "new title", body = null)),
@@ -83,7 +83,7 @@ object PostsDataProvider {
 
     @JvmStatic
     fun validPutPostProvider(): Stream<Arguments> {
-        return PostsApi.`Get all posts`().getRandomPosts(5)?.mapIndexed { index, post ->
+        return PostsApi().`Get all posts`().getRandomPosts(5)?.mapIndexed { index, post ->
             Arguments.of(
                 post.id,
                 PostDto(
@@ -98,16 +98,16 @@ object PostsDataProvider {
 
     @JvmStatic
     fun validDeletePostProvider(): Stream<Arguments> {
-        return PostsApi.`Get all posts`().getRandomPosts(3)?.map {
+        return PostsApi().`Get all posts`().getRandomPosts(3)?.map {
             Arguments.of(it.id)
         }?.stream() ?: Stream.empty()
     }
 
     @JvmStatic
     fun validGetCommentsProvider(): Stream<Arguments> {
-        val post = PostsApi.`Get all posts`().getRandomPost()!!
+        val post = PostsApi().`Get all posts`().getRandomPost()!!
         val comments: MutableList<Pair<Int, List<CommentDto>>> = mutableListOf()
-        val commentsForPost = PostsApi.`Get comments for post`(postId = post.id!!).getRandomComments(3)
+        val commentsForPost = PostsApi().`Get comments for post`(postId = post.id!!).getRandomComments(3)
         commentsForPost?.let {
             comments.add(Pair(post.id!!, commentsForPost))
         }
